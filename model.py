@@ -13,16 +13,18 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.emb_size = emb_size
         self.emb_dimension = emb_dimension
-        self.embeddings = nn.Embedding(emb_size, emb_dimension)
+        self.u_embeddings = nn.Embedding(emb_size, emb_dimension)
+        self.v_embeddings = nn.Embedding(emb_size, emb_dimension)
         self.init_emb()
 
     def init_emb(self):
         initrange = 0.5 / self.emb_dimension
-        self.embeddings.weight.data.uniform_(-initrange, initrange)
+        self.u_embeddings.weight.data.uniform_(-initrange, initrange)
+        self.v_embeddings.weight.data.uniform_(-initrange, initrange)
 
     def forward(self, edge, negative_edges):
-        emb_u = self.embeddings(Variable(torch.LongTensor([edge.u])))
-        emb_v = self.embeddings(Variable(torch.LongTensor([edge.v])))
+        emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
+        emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))
         score = torch.dot(emb_u, emb_v)
         score = F.logsigmoid(score)
         scores = [score]

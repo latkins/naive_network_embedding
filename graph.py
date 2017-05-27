@@ -14,7 +14,9 @@ class Graph:
         self.id_to_name = dict()
         self.graph = []
         self.edge_list = []
-        for line in open(fname):
+        f = open(fname)
+        f.readline()
+        for line in f:
             line = line.strip().split(' ')
             if line[0] not in self.name_to_id:
                 nid = len(self.name_to_id)
