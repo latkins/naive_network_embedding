@@ -19,12 +19,10 @@ def main():
             neg_edges = graph.negative_sampling(edge, 20)
             optimizer.zero_grad()
             loss = net.forward(edge, neg_edges)
-            #loss.backward()
-            #optimizer.step()
+            loss.backward()
+            optimizer.step()
             running_loss += loss.data[0]
-        #print(running_loss)
         running_loss=0.0
-        # net.save_embedding(['1'], graph)
 
 
 if __name__ == '__main__':
