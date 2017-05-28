@@ -13,8 +13,8 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.emb_size = emb_size
         self.emb_dimension = emb_dimension
-        self.u_embeddings = nn.Embedding(emb_size, emb_dimension)
-        self.v_embeddings = nn.Embedding(emb_size, emb_dimension)
+        self.u_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
+        self.v_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
         self.init_emb()
 
     def init_emb(self):
@@ -22,12 +22,14 @@ class Net(nn.Module):
         self.u_embeddings.weight.data.uniform_(-initrange, initrange)
         self.v_embeddings.weight.data.uniform_(-0, 0)
 
+    @profile
     def forward(self, edge, negative_edges):
         emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
         emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))
         score = torch.dot(emb_u, emb_v)
         score = F.logsigmoid(score)
         scores = [score]
+        assert len(negative_edges)<=20
         for edge in negative_edges:
             emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
             emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))

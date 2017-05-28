@@ -37,8 +37,8 @@ class Graph:
         neg_edges = []
         for _ in range(count):
             neg_v = random.randint(0, len(self.graph) - 1)
-            if neg_v not in self.graph[edge.u]:
-                neg_edges.append(Edge(edge.u, neg_v))
+            #if neg_v not in self.graph[edge.u]:
+            neg_edges.append(Edge(edge.u, neg_v))
         return neg_edges
 
 
