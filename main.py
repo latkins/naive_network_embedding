@@ -2,12 +2,11 @@ from graph import Graph
 from model import Net
 import torch.optim as optim
 from tqdm import tqdm
+import sys
 
 
 def main():
-    #graph_pos = '/users2/xfsun/node2vec/graph/karate.edgelist'
-    #graph_pos = '/users2/xfsun/m10_data/edge_list_0.data'
-    graph_pos = '/users2/xfsun/zhihu_data/cikm/data/edge_list_0.data'
+    graph_pos = sys.argv[1]
     graph = Graph(graph_pos)
     emb_size = len(graph.graph)
     emb_dimension = 100

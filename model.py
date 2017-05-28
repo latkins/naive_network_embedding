@@ -27,17 +27,17 @@ class Net(nn.Module):
     def forward(self, edge, negative_edges):
         emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
         emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))
-        #score = torch.dot(emb_u, emb_v)
-        #score = F.logsigmoid(score)
-        score=self.loss_function(emb_u, emb_v, Variable(torch.LongTensor([1])))
+        score = torch.dot(emb_u, emb_v)
+        score = F.logsigmoid(score)
+        #score=self.loss_function(emb_u, emb_v, Variable(torch.LongTensor([1])))
         scores = [score]
         assert len(negative_edges)<=20
         for edge in negative_edges:
             emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
             emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))
-            score=self.loss_function(emb_u, emb_v, Variable(torch.LongTensor([-1])))
-            #score = torch.dot(emb_u, emb_v)
-            #score = F.logsigmoid(-1 * score)
+            #score=self.loss_function(emb_u, emb_v, Variable(torch.LongTensor([-1])))
+            score = torch.dot(emb_u, emb_v)
+            score = F.logsigmoid(-1 * score)
             scores.append(score)
         # print(scores)
         loss = -1 * sum(scores)
