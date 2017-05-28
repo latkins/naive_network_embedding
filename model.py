@@ -20,7 +20,7 @@ class Net(nn.Module):
     def init_emb(self):
         initrange = 0.5 / self.emb_dimension
         self.u_embeddings.weight.data.uniform_(-initrange, initrange)
-        self.v_embeddings.weight.data.uniform_(-initrange, initrange)
+        self.v_embeddings.weight.data.uniform_(-0, 0)
 
     def forward(self, edge, negative_edges):
         emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
@@ -29,8 +29,8 @@ class Net(nn.Module):
         score = F.logsigmoid(score)
         scores = [score]
         for edge in negative_edges:
-            emb_u = self.embeddings(Variable(torch.LongTensor([edge.u])))
-            emb_v = self.embeddings(Variable(torch.LongTensor([edge.v])))
+            emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
+            emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))
             score = torch.dot(emb_u, emb_v)
             score = F.logsigmoid(-1 * score)
             scores.append(score)
@@ -38,9 +38,9 @@ class Net(nn.Module):
         loss = -1 * sum(scores)
         return loss
 
-    def save_embedding(self, to_be_saved_node_name, graph):
-        for node_name in to_be_saved_node_name:
-            nid = graph.name_to_id[node_name]
-            nid = Variable(torch.LongTensor([nid]))
-            emb = self.embeddings(nid).data[0]
-            print(emb)
+    # def save_embedding(self, to_be_saved_node_name, graph):
+    #     for node_name in to_be_saved_node_name:
+    #         nid = graph.name_to_id[node_name]
+    #         nid = Variable(torch.LongTensor([nid]))
+    #         emb = self.embeddings(nid).data[0]
+    #         print(emb)
