@@ -23,9 +23,9 @@ class Net(nn.Module):
         self.v_embeddings.weight.data.uniform_(-0, 0)
 
     def forward(self, edge, negative_edges):
+        losses=[]
         emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
         emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))
-        losses=[]
         score = torch.dot(emb_u, emb_v)
         score = F.logsigmoid(score)
         losses.append(-1*score)
@@ -33,7 +33,8 @@ class Net(nn.Module):
         for edge in negative_edges:
             neg_emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
             neg_emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))
-            neg_target = Variable(torch.LongTensor([-1]))
-            losses.append(self.criterion(neg_emb_u, neg_emb_v, neg_target))
-        return losses[0]
+            neg_score = torch.dot(neg_emb_u, neg_emb_v)
+            neg_score = F.logsigmoid(neg_score)
+            losses.append(-1*neg_score)
+        return sum(losses)
 
