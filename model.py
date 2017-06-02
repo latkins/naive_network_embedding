@@ -15,7 +15,6 @@ class Net(nn.Module):
         self.emb_dimension = emb_dimension
         self.u_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
         self.v_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
-        self.criterion = nn.CosineEmbeddingLoss()
         self.init_emb()
 
     def init_emb(self):
@@ -27,8 +26,6 @@ class Net(nn.Module):
         emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
         emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))
         losses=[]
-        #target = Variable(torch.LongTensor([1]))
-        #losses.append(self.criterion(emb_u, emb_v, target))
         score = torch.dot(emb_u, emb_v)
         score = F.logsigmoid(score)
         losses.append(-1*score)
@@ -38,9 +35,5 @@ class Net(nn.Module):
             neg_emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))
             neg_target = Variable(torch.LongTensor([-1]))
             losses.append(self.criterion(neg_emb_u, neg_emb_v, neg_target))
-        #     scores.append(score)
-        # # print(scores)
-        # loss = -1 * sum(scores)
-        #return sum(losses)
         return losses[0]
 

@@ -14,9 +14,7 @@ class Graph:
         self.id_to_name = dict()
         self.graph = []
         self.edge_list = []
-        f = open(fname)
-        f.readline()
-        for line in f:
+        for line in open(fname):
             line = line.strip().split(' ')
             if line[0] not in self.name_to_id:
                 nid = len(self.name_to_id)
@@ -26,8 +24,8 @@ class Graph:
             if line[1] not in self.name_to_id:
                 nid = len(self.name_to_id)
                 self.name_to_id[line[1]] = nid
-                self.graph.append(set())
                 self.id_to_name[nid] = line[1]
+                self.graph.append(set())
             nid0 = self.name_to_id[line[0]]
             nid1 = self.name_to_id[line[1]]
             self.graph[nid0].add(nid1)
@@ -37,8 +35,8 @@ class Graph:
         neg_edges = []
         for _ in range(count):
             neg_v = random.randint(0, len(self.graph) - 1)
-            #if neg_v not in self.graph[edge.u]:
-            neg_edges.append(Edge(edge.u, neg_v))
+            if neg_v not in self.graph[edge.u]:
+                neg_edges.append(Edge(edge.u, neg_v))
         return neg_edges
 
 
