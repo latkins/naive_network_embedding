@@ -29,7 +29,6 @@ class Net(nn.Module):
         score = torch.dot(emb_u, emb_v)
         score = F.logsigmoid(score)
         losses.append(-1*score)
-        return losses[0]
         for edge in negative_edges:
             neg_emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
             neg_emb_v = self.v_embeddings(Variable(torch.LongTensor([edge.v])))
