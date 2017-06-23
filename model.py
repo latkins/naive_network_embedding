@@ -22,6 +22,7 @@ class Net(nn.Module):
         self.u_embeddings.weight.data.uniform_(-initrange, initrange)
         self.v_embeddings.weight.data.uniform_(-0, 0)
 
+    @profile
     def forward(self, edge, negative_edges):
         losses=[]
         emb_u = self.u_embeddings(Variable(torch.LongTensor([edge.u])))
