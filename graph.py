@@ -31,12 +31,13 @@ class Graph:
             self.graph[nid0].add(nid1)
             self.edge_list.append(Edge(nid0, nid1))
 
-    def negative_sampling(self, edge, count):
+    def negative_sampling(self, edges, count):
         neg_edges = []
-        for _ in range(count):
-            neg_v = random.randint(0, len(self.graph) - 1)
-            if neg_v not in self.graph[edge.u]:
-                neg_edges.append(Edge(edge.u, neg_v))
+        for edge in edges:
+            for _ in range(count):
+                neg_v = random.randint(0, len(self.graph) - 1)
+                if neg_v not in self.graph[edge.u]:
+                    neg_edges.append(Edge(edge.u, neg_v))
         return neg_edges
 
 

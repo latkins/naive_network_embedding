@@ -14,17 +14,25 @@ def main():
     emb_dimension = 100
     net = Net(emb_size, emb_dimension)
     optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.9)
+    batch_size=100
     for i in range(100):
         running_loss = 0.0
-        for edge in tqdm(graph.edge_list):
-            neg_edges = graph.negative_sampling(edge, 20)
+        for batch_index in tqdm(range(len(graph.edge_list)/batch_size)):
+            begin=batch_index*batch_size
+            end=(batch_index+1)*batch_size
+            positive_edges=graph.edge_list[begin:end]
+            negative_edges = graph.negative_sampling(positive_edges, 20)
+            pos_u=[edge.u for edge in positive_edges]
+            pos_v=[edge.v for edge in positive_edges]
+            neg_u=[edge.u for edge in negative_edges]
+            neg_v=[edge.v for edge in negative_edges]
             optimizer.zero_grad()
-            loss = net(edge, neg_edges)
+            loss = net.forward(pos_u,pos_v, neg_u, neg_v)
             loss.backward()
             optimizer.step()
-            running_loss += loss.data[0]
+            #running_loss += loss.data[0]
         #print(running_loss)
-        running_loss=0.0
+        #running_loss=0.0
 
 
 if __name__ == '__main__':
