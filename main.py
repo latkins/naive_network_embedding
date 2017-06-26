@@ -14,7 +14,7 @@ def main():
     emb_dimension = 100
     net = Net(emb_size, emb_dimension)
     optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.9)
-    batch_size=100
+    batch_size=10000
     for i in range(100):
         running_loss = 0.0
         for batch_index in tqdm(range(len(graph.edge_list)/batch_size)):

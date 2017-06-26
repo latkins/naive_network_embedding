@@ -14,9 +14,7 @@ class Net(nn.Module):
         self.emb_size = emb_size
         self.emb_dimension = emb_dimension
         self.u_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
-        self.u_embeddings.weight.requires_grad = True
         self.v_embeddings = nn.Embedding(emb_size, emb_dimension, sparse=True)
-        self.v_embeddings.weight.requires_grad = True
         self.init_emb()
 
     def init_emb(self):
