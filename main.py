@@ -13,7 +13,7 @@ def main():
     emb_size = len(graph.graph)
     emb_dimension = 100
     net = Net(emb_size, emb_dimension)
-    optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.9)
+    optimizer = optim.SGD(net.parameters(), lr=0.01)
     batch_size=10000
     for i in range(100):
         running_loss = 0.0
